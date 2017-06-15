@@ -49,7 +49,7 @@ final class Todo: Model {
         else {
             fatalError("Can't generate URL for todo")
         }
-        return "\(rootURL)/todos/\(id)"
+        return "\(rootURL)todos/\(id)"
     }
 }
 
