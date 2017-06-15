@@ -9,6 +9,7 @@
 import Vapor
 import FluentProvider
 import HTTP
+import Foundation
 
 final class Todo: Model {
     var title: String
@@ -39,6 +40,16 @@ final class Todo: Model {
         try row.set("completed", completed)
         try row.set("order", order)
         return row
+    }
+    
+    func url() -> String {
+        guard
+            let rootURL = ProcessInfo.processInfo.environment["ROOT_URL"],
+            let id = self.id?.string
+        else {
+            fatalError("Can't generate URL for todo")
+        }
+        return "\(rootURL)/todos/\(id)"
     }
 }
 
@@ -77,6 +88,7 @@ extension Todo: JSONConvertible {
         try json.set(Todo.titleKey, title)
         try json.set(Todo.completedKey, completed)
         try json.set(Todo.orderKey, order)
+        try json.set("url", url())
         return json
     }
 }
